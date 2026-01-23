@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import styled from 'styled-components';
+import Header from './components/Header';
+import GameBoard from './components/GameBoard';
+import StatusBar from './components/StatusBar';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppWrapper>
+      <Header />
+      <GameArea>
+        <GameBoard />
+        <StatusBar />
+      </GameArea>
+    </AppWrapper>
   );
 }
 
 export default App;
+
+// --- STYLES ---
+const AppWrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px;
+  background-color: #fff; /* Білий фон сторінки */
+`;
+
+const GameArea = styled.div`
+  display: flex;
+  gap: 50px; /* Відстань між дошкою та статус баром */
+  align-items: flex-start;
+`;
