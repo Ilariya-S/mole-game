@@ -1,50 +1,48 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import moleImg from '../assets/mole.png';
 import holeImg from '../assets/hole.png';
 
-const MoleSlot = ({ isMoleVisible = false }) => {
-    return (
-        <SlotContainer>
-            {/* Кріт (знаходиться "під" норою або вилазить з неї) */}
-            <MoleImage
-                src={moleImg}
-                alt="mole"
-                isVisible={isMoleVisible}
-            />
-
-            {/* Нора (статична, завжди відображається поверх крота або як фон) */}
-            <HoleImage src={holeImg} alt="hole" />
-        </SlotContainer>
-    );
+// Додаємо проп status
+const MoleSlot = ({ isMoleVisible = false, status = null }) => {
+  return (
+    <SlotContainer status={status}>
+      <MoleImage src={moleImg} alt="mole" isVisible={isMoleVisible} />
+      <HoleImage src={holeImg} alt="hole" />
+    </SlotContainer>
+  );
 };
 
 export default MoleSlot;
 
-// --- STYLES ---
-
+// Оновлюємо стилі
 const SlotContainer = styled.div`
   width: 150px;
   height: 150px;
-  /* position: relative потрібен, щоб ми могли абсолютно позиціонувати картинки всередині */
-  position: relative; 
+  position: relative;
   display: flex;
   justify-content: center;
-  align-items: flex-end; /* Картинки будуть притиснуті до низу */
-  overflow: hidden; /* Щоб кріт не вилазив за межі квадрата, якщо він завеликий */
+  align-items: flex-end;
+  overflow: hidden;
   
-  /* Стилі самої картки */
-  background-color: #e0e0e0;
+  /* Зміна фону залежно від статусу */
+  background-color: ${props =>
+    props.status === 'hit' ? '#90EE90' : // Зелений
+      props.status === 'miss' ? '#FF7F7F' : // Червоний
+        '#e0e0e0' // Стандартний сірий
+  };
+  
   border: 2px solid #333;
   border-radius: 10px;
   box-shadow: 3px 3px 5px rgba(0,0,0,0.2);
   cursor: pointer;
+  transition: background-color 0.2s;
 
   &:active {
     transform: scale(0.98);
   }
 `;
-
+// ... HoleImage та MoleImage без змін ...
 const HoleImage = styled.img`
   width: 80%;
   position: absolute;

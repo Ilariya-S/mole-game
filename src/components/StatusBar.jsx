@@ -1,18 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 const StatusBar = () => {
-    return (
-        <StatusContainer>
-            <Title>STATUS BAR</Title>
-            <InfoItem>Game difficulty: 1</InfoItem>
-            <InfoItem>Score: 0 / 100 point(s)</InfoItem>
-            <InfoItem>You failed: 0 time(s)</InfoItem>
-            <InfoItem>Time: 200 ms</InfoItem>
-        </StatusContainer>
-    );
-};
+  // Витягуємо реальні дані з Redux
+  const { difficulty, score, misses, timeLeft } = useSelector((state) => state.game);
 
+  return (
+    <StatusContainer>
+      <Title>STATUS BAR</Title>
+      <InfoItem>Game difficulty: {difficulty}</InfoItem>
+      <InfoItem>Score: {score} / 100 point(s)</InfoItem>
+      <InfoItem>You failed: {misses} time(s)</InfoItem>
+      <InfoItem>Time: {timeLeft} ms</InfoItem>
+    </StatusContainer>
+  );
+};
+// ... стилі ті самі ...
 export default StatusBar;
 
 // --- STYLES ---
