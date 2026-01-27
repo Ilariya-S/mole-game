@@ -3,10 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     score: 0,
     misses: 0,
-    timeLeft: 4000, // Початковий час на хід (4с = 4000мс)
+    timeLeft: 4000,
     difficulty: 1,
-    activeMole: null, // Індекс слота, де сидить кріт (0-5)
-    feedbackStatus: null, // 'hit' (зелений), 'miss' (червоний) або null
+    activeMole: null,
+    lastMoleIndex: null,
+    feedbackStatus: null, // 'hit' (green), 'miss' (red) або null
     gameStatus: 'IDLE', // 'IDLE', 'PLAYING', 'WON', 'LOST'
 };
 
@@ -15,13 +16,13 @@ const gameSlice = createSlice({
     initialState,
     reducers: {
         startGame: (state) => {
-            // Скидаємо все на початок
             state.score = 0;
             state.misses = 0;
             state.timeLeft = 4000;
             state.difficulty = 1;
             state.gameStatus = 'PLAYING';
             state.activeMole = null;
+            state.lastMoleIndex = null;
             state.feedbackStatus = null;
         },
         stopGame: (state, action) => {
@@ -29,35 +30,58 @@ const gameSlice = createSlice({
             state.activeMole = null;
         },
         showMole: (state) => {
-            // Вибираємо випадкову нору від 0 до 5
+            // Choose random mole
             let newMole;
             do {
-                newMole = Math.floor(Math.random() * 6);
-            } while (newMole === state.activeMole); // Щоб не з'являвся в тій же норі підряд
+                newMole = Math.floor(Math.random() * 6); //floor - округлення
+            } while (newMole === state.lastMoleIndex); // check if it's not the same hole
 
             state.activeMole = newMole;
+            state.lastMoleIndex = newMole;
             state.feedbackStatus = null;
         },
         hideMole: (state) => {
             state.activeMole = null;
         },
         registerHit: (state) => {
+            if (state.gameStatus !== 'PLAYING') return;
+            
             state.score += 1;
-            state.feedbackStatus = 'hit'; // Для підсвітки зеленим
-
-            // Логіка складності: кожні 10 очок зменшуємо час
+            state.feedbackStatus = 'hit';
+            //check if WON
+            if (state.score >= 100) {
+                state.gameStatus = 'WON';
+                state.activeMole = null;
+            }
+            // upgrade dificulty of game
             if (state.score % 10 === 0 && state.timeLeft > 500) {
-                state.timeLeft -= 100; // Пришвидшуємо гру
+                state.timeLeft -= 200;
                 state.difficulty += 1;
             }
         },
         registerMiss: (state) => {
+            if (state.gameStatus !== 'PLAYING') return;
+
             state.misses += 1;
-            state.feedbackStatus = 'miss'; // Для підсвітки червоним
+            state.feedbackStatus = 'miss'; 
+
+            //check if LOST
+            if (state.misses >= 3) {
+                state.gameStatus = 'LOST';
+                state.activeMole = null;
+            }
         },
         registerTimeoutMiss: (state) => {
+            if (state.gameStatus !== 'PLAYING') return;
+            
             state.misses += 1;
-            state.feedbackStatus = null; // Тайм-аут просто ховає крота без підсвітки (згідно ТЗ)
+            state.feedbackStatus = null;
+
+            //check if LOST
+            if (state.misses >= 3) {
+                state.gameStatus = 'LOST';
+                state.activeMole = null;
+            }
         }
     },
 });

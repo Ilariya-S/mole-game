@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux'; // Redux hooks
+import { useDispatch, useSelector } from 'react-redux'; 
 import { startGame } from './store/gameSlice';
-import useGameLoop from './hooks/useGameLoop'; // Наш ігровий цикл
+import useGameLoop from './hooks/useGameLoop';
 
 import Header from './components/Header';
 import GameBoard from './components/GameBoard';
@@ -12,14 +12,12 @@ function App() {
   const dispatch = useDispatch();
   const { gameStatus } = useSelector((state) => state.game);
 
-  // Активуємо ігровий двигун
   useGameLoop();
 
   return (
     <AppWrapper>
       <Header />
 
-      {/* Показуємо кнопку Start, якщо гра не йде */}
       {gameStatus !== 'PLAYING' && (
         <Overlay>
           <StartButton onClick={() => dispatch(startGame())}>
@@ -38,39 +36,36 @@ function App() {
 
 export default App;
 
-// --- Add these styles ---
 const Overlay = styled.div`
+  z-index: 100;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 100;
 `;
 
 const StartButton = styled.button`
   padding: 20px 40px;
   font-size: 24px;
-  background: #333;
+  background: #f8c8dc;
   color: white;
-  border: none;
+  border: 2px solid #333;
   border-radius: 10px;
   cursor: pointer;
-  &:hover { background: #555; }
+  &:hover { background: #efa5c4; }
 `;
 
 const AppWrapper = styled.div`
-  /* ... твої старі стилі ... */
-  min-height: 100vh;
+  position: relative; 
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
   padding-top: 50px;
   background-color: #fff;
-  position: relative; /* Для Overlay */
 `;
-// ... GameArea той самий ...
 const GameArea = styled.div`
   display: flex;
-  gap: 50px; /* Відстань між дошкою та статус баром */
+  gap: 50px;
   align-items: flex-start;
 `;

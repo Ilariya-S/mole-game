@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import moleImg from '../assets/mole.png';
 import holeImg from '../assets/hole.png';
 
@@ -15,21 +15,20 @@ const MoleSlot = ({ isMoleVisible = false, status = null }) => {
 
 export default MoleSlot;
 
-// Оновлюємо стилі
 const SlotContainer = styled.div`
-  width: 150px;
-  height: 150px;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: flex-end;
   overflow: hidden;
+  width: 150px;
+  height: 150px;
   
-  /* Зміна фону залежно від статусу */
+  /* Change background depending on status */
   background-color: ${props =>
-    props.status === 'hit' ? '#90EE90' : // Зелений
-      props.status === 'miss' ? '#FF7F7F' : // Червоний
-        '#e0e0e0' // Стандартний сірий
+    props.status === 'hit' ? '#90EE90' : 
+      props.status === 'miss' ? '#FF7F7F' : 
+        '#e0e0e0'
   };
   
   border: 2px solid #333;
@@ -37,31 +36,25 @@ const SlotContainer = styled.div`
   box-shadow: 3px 3px 5px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: background-color 0.2s;
-
   &:active {
     transform: scale(0.98);
   }
 `;
-// ... HoleImage та MoleImage без змін ...
 const HoleImage = styled.img`
-  width: 80%;
+  z-index: 2;
   position: absolute;
-  bottom: 10px; /* Трохи відступу знизу */
-  z-index: 2;   /* Нора (або передня частина землі) вище по шару */
-  pointer-events: none; /* Щоб клік проходив крізь картинку (опціонально) */
+  width: 80%;
+  bottom: 10px;
+  pointer-events: none;
 `;
 
 const MoleImage = styled.img`
-  width: 60%;
   position: absolute;
-  bottom: 15px; /* Кріт сидить трохи вище дна, щоб виглядати "в" норі */
-  z-index: 1;   /* Кріт нижче по шару, за норою */
-  transition: transform 0.2s ease-in-out; /* Плавна анімація появи */
-  
-  /* Логіка видимості:
-     Якщо visible = true, показуємо (scale 1).
-     Якщо false, ховаємо вниз (translateY) або зменшуємо (scale 0).
-  */
-  transform: ${props => props.isVisible ? 'translateY(0)' : 'translateY(100%)'};
+  z-index: 1; 
+  width: 80%;
+  bottom: 10px;
+  transition: transform 0.2s ease-in-out;
   opacity: ${props => props.isVisible ? 1 : 0};
+  pointer-events: ${props => props.isVisible ? 'auto' : 'none'};
+  transition: opacity 0.2s ease-in-out;
 `;

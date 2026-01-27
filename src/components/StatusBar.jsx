@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 const StatusBar = () => {
-  // Витягуємо реальні дані з Redux
   const { difficulty, score, misses, timeLeft } = useSelector((state) => state.game);
 
   return (
@@ -16,21 +15,19 @@ const StatusBar = () => {
     </StatusContainer>
   );
 };
-// ... стилі ті самі ...
 export default StatusBar;
 
-// --- STYLES ---
 const StatusContainer = styled.div`
-  width: 300px;
-  height: 400px;
-  background-color: #f8c8dc; /* Рожевий колір */
-  border: 2px solid #333;
-  border-radius: 10px;
-  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 300px;
+  height: 350px;
+  padding: 20px;
   font-family: sans-serif;
+  background-color: #f8c8dc;
+  border: 2px solid #333;
+  border-radius: 10px;
 `;
 
 const Title = styled.h2`

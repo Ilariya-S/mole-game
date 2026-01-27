@@ -7,7 +7,6 @@ const Header = () => {
 
 export default Header;
 
-// --- STYLES ---
 const MainTitle = styled.h1`
   font-family: sans-serif;
   font-size: 48px;
