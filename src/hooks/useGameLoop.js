@@ -9,37 +9,54 @@ import {
 const useGameLoop = () => {
     const dispatch = useDispatch();
     const { gameStatus, timeLeft, activeMole, feedbackStatus } = useSelector((state) => state.game);
-    
-    const moleTimerRef = useRef(null);
-    const loopTimerRef = useRef(null);
 
-       useEffect(() => {
-        if (gameStatus !== 'PLAYING') {
-            clearTimeout(moleTimerRef.current);
-            clearTimeout(loopTimerRef.current);
-            return;
-        }
+    const requestID = useRef();
+    const previousTime = useRef();
+    const timer = useRef(0);
 
-        // SCENARIO 1: The mole is already on the field, waiting for a timeout (if the player did not make it in time).
-        if (activeMole !== null && feedbackStatus === null) {
-            moleTimerRef.current = setTimeout(() => {
-                dispatch(registerTimeoutMiss());
-                dispatch(hideMole());
-            }, timeLeft);
-        }
+    const gameStateRef = useRef({ gameStatus, timeLeft, activeMole, feedbackStatus });
 
-        // SCENARIO 2: The mole is not there (or has just hidden/been clicked), prepare the next one
-        if (activeMole === null) {
-            loopTimerRef.current = setTimeout(() => {
-                dispatch(showMole());
-            }, 200); 
-        }
+    useEffect(() => {
+        gameStateRef.current = { gameStatus, timeLeft, activeMole, feedbackStatus };
+        timer.current = 0;
+    }, [gameStatus, timeLeft, activeMole, feedbackStatus]);
 
-        return () => {
-            clearTimeout(moleTimerRef.current);
-            clearTimeout(loopTimerRef.current);
+    const loop = time => {
+        if (previousTime.current !== undefined) {
+            const deltaTime = time - previousTime.current;
+            const currentState = gameStateRef.current;
+
+            if (currentState.gameStatus === 'PLAYING') {
+                timer.current += deltaTime;
+                if (currentState.activeMole !== null && currentState.feedbackStatus === null) {
+                    if (timer.current >= currentState.timeLeft) {
+                        dispatch(registerTimeoutMiss());
+                        dispatch(hideMole());
+                        timer.current = 0;
+                    }
+                }
+                else if (currentState.activeMole !== null && currentState.feedbackStatus !== null) {
+                    if (timer.current >= 500) {
+                        dispatch(hideMole());
+                        timer.current = 0;
+                    }
+                }
+                else if (currentState.activeMole === null) {
+                    if (timer.current >= 200) {
+                        dispatch(showMole());
+                        timer.current = 0;
+                    }
+                }
+            }
+
         };
-    }, [gameStatus, activeMole, feedbackStatus, timeLeft, dispatch]);
+        previousTime.current = time;
+        requestID.current = requestAnimationFrame(loop);
+    };
+    useEffect(() => {
+        requestID.current = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(requestID.current);
+    }, []);
 };
 
 export default useGameLoop;

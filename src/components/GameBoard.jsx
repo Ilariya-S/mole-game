@@ -15,14 +15,8 @@ const GameBoard = () => {
 
         if (index === activeMole) {
             dispatch(registerHit());
-            setTimeout(() => {
-                dispatch(hideMole());
-            }, 500);
         } else {
             dispatch(registerMiss());
-            setTimeout(() => {
-                dispatch(hideMole());
-            }, 500);
         }
     };
 

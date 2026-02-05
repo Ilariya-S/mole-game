@@ -25,10 +25,7 @@ const gameSlice = createSlice({
             state.lastMoleIndex = null;
             state.feedbackStatus = null;
         },
-        stopGame: (state, action) => {
-            state.gameStatus = action.payload; // 'WON' або 'LOST'
-            state.activeMole = null;
-        },
+
         showMole: (state) => {
             // Choose random mole
             let newMole;
@@ -45,15 +42,16 @@ const gameSlice = createSlice({
         },
         registerHit: (state) => {
             if (state.gameStatus !== 'PLAYING') return;
-            
+
             state.score += 1;
             state.feedbackStatus = 'hit';
             //check if WON
             if (state.score >= 100) {
                 state.gameStatus = 'WON';
                 state.activeMole = null;
+                return;
             }
-            // upgrade dificulty of game
+            // upgrade difficulty of game
             if (state.score % 10 === 0 && state.timeLeft > 500) {
                 state.timeLeft -= 200;
                 state.difficulty += 1;
@@ -63,7 +61,7 @@ const gameSlice = createSlice({
             if (state.gameStatus !== 'PLAYING') return;
 
             state.misses += 1;
-            state.feedbackStatus = 'miss'; 
+            state.feedbackStatus = 'miss';
 
             //check if LOST
             if (state.misses >= 3) {
@@ -73,7 +71,7 @@ const gameSlice = createSlice({
         },
         registerTimeoutMiss: (state) => {
             if (state.gameStatus !== 'PLAYING') return;
-            
+
             state.misses += 1;
             state.feedbackStatus = null;
 
