@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/mole-game/static/css/main.e6c13ad2.css",
-    "main.js": "/mole-game/static/js/main.e6267113.js",
+    "main.js": "/mole-game/static/js/main.6dcb14b6.js",
     "static/js/453.18fdbaf3.chunk.js": "/mole-game/static/js/453.18fdbaf3.chunk.js",
     "static/media/mole.png": "/mole-game/static/media/mole.3364477f1be96b1166fb.png",
     "static/media/hole.png": "/mole-game/static/media/hole.cb65f343928772b6b0f1.png",
     "index.html": "/mole-game/index.html",
     "main.e6c13ad2.css.map": "/mole-game/static/css/main.e6c13ad2.css.map",
-    "main.e6267113.js.map": "/mole-game/static/js/main.e6267113.js.map",
+    "main.6dcb14b6.js.map": "/mole-game/static/js/main.6dcb14b6.js.map",
     "453.18fdbaf3.chunk.js.map": "/mole-game/static/js/453.18fdbaf3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.e6267113.js"
+    "static/js/main.6dcb14b6.js"
   ]
 }
